@@ -8,19 +8,25 @@
 from __future__ import print_function
 
 import json
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
+from flask_session import Session
+
 
 import calculator as Calc
 
 
 application = Flask(__name__)
+application.secret_key = 'supersecretkey'
 
 
-@application.route('/')
+
+@application.route('/cal')
 def calculator():
     """Main route
     """
-    return render_template('calculator.html')
+    session["user"] = request.args.get('username')
+    print(session["user"])
+    return render_template('calculator.html', username = session["user"])
 
 
 # compute expression
@@ -57,4 +63,8 @@ def calculate():
 
 
 if __name__ == "__main__":
+    
+
+    
+
     application.run(host='0.0.0.0', debug=False)
